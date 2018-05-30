@@ -27,8 +27,10 @@ public class ConsumerService {
                 messages = consumer.getMessages();//NPE?
                 message = consumer.getMessage();
             }
-            //Main.linkedBlockingQueue.addAll(messages);
-            Main.linkedBlockingQueue.offer(message);
+            //Main.linkedBlockingQueue.offer(message);
+            for (String messageX : messages) {
+                Main.linkedBlockingQueue.offer(messageX);
+            }
             log.info("Initialized consumer from thread: " + Thread.currentThread().getName());
         } catch (InterruptedException | JMSException e) {
             e.printStackTrace();//todo
