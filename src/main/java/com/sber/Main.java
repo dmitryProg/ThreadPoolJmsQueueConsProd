@@ -3,6 +3,7 @@ package com.sber;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class Main {
@@ -12,7 +13,14 @@ public class Main {
         ConsumerService consumerService = new ConsumerService();
         ProducerService producerService = new ProducerService();
         consumerService.start();
-        producerService.start();
+        int i = producerService.start();
+        try {
+            TimeUnit.MILLISECONDS.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (i == 0) consumerService.start();
+
 
 
 //        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();

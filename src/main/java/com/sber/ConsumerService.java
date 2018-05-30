@@ -21,7 +21,7 @@ public class ConsumerService {
         String message = null;
         List<String> messages = new ArrayList<>();
         try (JmsConsumer consumer = new JmsConsumer(URL, "test.in")) {
-            while (message == null) {
+            while (messages.isEmpty()) {
                 consumer.init();
 
                 messages = consumer.getMessages();//NPE?

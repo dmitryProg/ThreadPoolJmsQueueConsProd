@@ -36,11 +36,12 @@ public class ProducerService {
             }
             TimeUnit.MILLISECONDS.sleep(300);
         } catch (Throwable e) {
-            e.printStackTrace();
+            e.printStackTrace();//todo change all these exceptions, veri govnokods
         }
     };
 
-    public void start(){
+    public int start(){
         producerExecutorService.submit(produceTask);
+        return 0;
     }
 }
