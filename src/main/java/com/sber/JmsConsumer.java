@@ -16,9 +16,14 @@ public class JmsConsumer implements MessageListener, AutoCloseable {
     private MessageConsumer consumer;
     private String queueName;
     private List<String> messages = new ArrayList<>();
+    private String message;
 
     public List<String> getMessages() {
         return messages;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public JmsConsumer(String url, String queue) {
@@ -44,6 +49,7 @@ public class JmsConsumer implements MessageListener, AutoCloseable {
                 log.info("Received message: " + ((TextMessage) msg).getText());
                 log.info("LASTMESSAGE " + lastMessage);
                 messages.add(lastMessage);
+                message = lastMessage;
             } catch (JMSException e) {
                 e.printStackTrace();//todo
             }

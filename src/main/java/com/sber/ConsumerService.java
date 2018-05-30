@@ -3,6 +3,7 @@ package com.sber;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.jms.JMSException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -17,13 +18,17 @@ public class ConsumerService {
 
     private Runnable consumeTask = () -> {
         String URL = "tcp://localhost:61616";
-        List<String> messages = null;
+        String message = null;
+        List<String> messages = new ArrayList<>();
         try (JmsConsumer consumer = new JmsConsumer(URL, "test.in")) {
-            while (messages == null) {
+            while (message == null) {
                 consumer.init();
-                messages = consumer.getMessages();
+
+                messages = consumer.getMessages();//NPE?
+                message = consumer.getMessage();
             }
-            Main.linkedBlockingQueue.addAll(messages);
+            //Main.linkedBlockingQueue.addAll(messages);
+            Main.linkedBlockingQueue.offer(message);
             log.info("Initialized consumer from thread: " + Thread.currentThread().getName());
         } catch (InterruptedException | JMSException e) {
             e.printStackTrace();//todo
