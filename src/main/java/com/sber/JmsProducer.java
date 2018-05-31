@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
+import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -41,14 +42,14 @@ public class JmsProducer extends Thread implements AutoCloseable {
         try {
             MessageProducer messageProducer = init();
             log.info("Producer is running");
-            active = !active;
+
             while (active) {
                 try {
-                    String text = null;
+                    String text;
                         while (active && (text = messagesQueue.poll()) != null) {
                             Message msg = session.createTextMessage(text);
-                            msg.setObjectProperty("Created", "o");//(new Date()).toString()
-                            //в очередь
+                            msg.setObjectProperty("Created", (new Date()).toString());
+                            log.info("inside sending " + ((TextMessage) msg).getText());
                             messageProducer.send(msg);
                             log.info("Message " + msg.getJMSMessageID() +
                                     " was sent from a Run() thread: " + Thread.currentThread().getName());
@@ -68,7 +69,6 @@ public class JmsProducer extends Thread implements AutoCloseable {
 
     public void close() {
         log.info("AutoClosing producer and connection");
-        //active = !active;
         active = false;
         if (connection != null) {
             try {

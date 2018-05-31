@@ -18,16 +18,12 @@ public class ConsumerService {
 
     private Runnable consumeTask = () -> {
         String URL = "tcp://localhost:61616";
-        String message = null;
         List<String> messages = new ArrayList<>();
         try (JmsConsumer consumer = new JmsConsumer(URL, "test.in")) {
             while (messages.isEmpty()) {
                 consumer.init();
-
-                messages = consumer.getMessages();//NPE?
-                message = consumer.getMessage();
+                messages = consumer.getMessages();
             }
-            //Main.linkedBlockingQueue.offer(message);
             for (String messageX : messages) {
                 Main.linkedBlockingQueue.offer(messageX);
             }

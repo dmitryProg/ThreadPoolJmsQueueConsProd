@@ -2,7 +2,6 @@ package com.sber;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +17,7 @@ public class ProducerService {
 
     Runnable produceTask = () -> {
         try {
-            TimeUnit.MILLISECONDS.sleep(3000);
+            TimeUnit.MILLISECONDS.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -26,22 +25,22 @@ public class ProducerService {
         try (JmsProducer producer = new JmsProducer(url)) {
             producer.start();
 
-            String line = "first";
+            String line;
             log.info("Before producer actions the queue contains:");
             log.info("||| " + Main.linkedBlockingQueue.toString() + " |||");
-            while (line != null) {
+            while (!Main.linkedBlockingQueue.isEmpty()){
+                Thread.sleep(100);
                 line = Main.linkedBlockingQueue.poll();
                 log.info("Producer line of PS is " + line);
-                producer.send(System.currentTimeMillis() + line);
+                producer.send(line + " at time: " + System.currentTimeMillis());
             }
-            TimeUnit.MILLISECONDS.sleep(300);
+            TimeUnit.MILLISECONDS.sleep(200);
         } catch (Throwable e) {
             e.printStackTrace();//todo change all these exceptions, veri govnokods
         }
     };
 
-    public int start(){
+    public void start() {
         producerExecutorService.submit(produceTask);
-        return 0;
     }
 }

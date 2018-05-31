@@ -13,13 +13,19 @@ public class Main {
         ConsumerService consumerService = new ConsumerService();
         ProducerService producerService = new ProducerService();
         consumerService.start();
-        int i = producerService.start();
+        producerService.start();
         try {
             TimeUnit.MILLISECONDS.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (i == 0) consumerService.start();
+        consumerService.start();
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            System.exit(0);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
 
