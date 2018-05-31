@@ -8,6 +8,12 @@ import java.util.concurrent.*;
 
 @Slf4j
 public class CustomExecutorService {
+    //        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
+//        System.out.println("Number of currently running threads: " + threads.size());
+//        for (Thread thread : threads.keySet()) {
+//            System.out.println(thread);
+//        }
+
 //
 //    private BlockingQueue<Callable<String>> innerQueue;//todo;
 //    private ExecutorService executorService;

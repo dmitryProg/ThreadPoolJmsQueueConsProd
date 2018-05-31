@@ -12,7 +12,16 @@ public class Main {
     public static void main(String[] args) {
         ConsumerService consumerService = new ConsumerService();
         ProducerService producerService = new ProducerService();
-        consumerService.start();
+
+        linkedBlockingQueue.offer("1");
+        linkedBlockingQueue.offer("2");
+        linkedBlockingQueue.offer("3");
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         producerService.start();
         try {
             TimeUnit.MILLISECONDS.sleep(10000);
@@ -20,19 +29,18 @@ public class Main {
             e.printStackTrace();
         }
         consumerService.start();
+
+//        for (int i = 0; i < 4; i++) {
+//            producerService.start();
+//        }
+        producerService.start();
+        //consumerService.start();
         try {
-            TimeUnit.MILLISECONDS.sleep(1000);
+            TimeUnit.MILLISECONDS.sleep(20000);
             System.exit(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-
-
-//        Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
-//        System.out.println("Number of currently running threads: " + threads.size());
-//        for (Thread thread : threads.keySet()) {
-//            System.out.println(thread);
-//        }
     }
 }

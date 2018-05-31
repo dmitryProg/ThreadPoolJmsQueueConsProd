@@ -13,7 +13,7 @@ public class ConsumerService {
 
     public ConsumerService() {
         consumerExecutorService = Executors//.newCachedThreadPool();
-                .newFixedThreadPool(10);
+                .newFixedThreadPool(4);
     }
 
     private Runnable consumeTask = () -> {
@@ -27,6 +27,7 @@ public class ConsumerService {
             for (String messageX : messages) {
                 Main.linkedBlockingQueue.offer(messageX);
             }
+            log.info("Inner QUEUE: " + Main.linkedBlockingQueue.toString());
             log.info("Initialized consumer from thread: " + Thread.currentThread().getName());
         } catch (InterruptedException | JMSException e) {
             e.printStackTrace();//todo

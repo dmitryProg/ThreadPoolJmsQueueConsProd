@@ -7,6 +7,7 @@ import javax.jms.*;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class JmsProducer extends Thread implements AutoCloseable {
@@ -51,8 +52,9 @@ public class JmsProducer extends Thread implements AutoCloseable {
                             msg.setObjectProperty("Created", (new Date()).toString());
                             log.info("inside sending " + ((TextMessage) msg).getText());
                             messageProducer.send(msg);
-                            log.info("Message " + msg.getJMSMessageID() +
-                                    " was sent from a Run() thread: " + Thread.currentThread().getName());
+                            log.info("Message |" + ((TextMessage) msg).getText()  +
+                                    "| was sent from a Run() thread: " + Thread.currentThread().getName()
+                                    + " with ID " + msg.getJMSMessageID());
                     }
                 } catch (JMSException e) {
                     e.printStackTrace();//todo
@@ -68,8 +70,13 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     public void close() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         log.info("AutoClosing producer and connection");
-        active = false;
+        //active = false;
         if (connection != null) {
             try {
                 connection.close();
