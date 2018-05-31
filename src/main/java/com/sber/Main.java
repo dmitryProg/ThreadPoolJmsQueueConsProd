@@ -34,7 +34,7 @@ public class Main {
 //            producerService.start();
 //        }
         producerService.start();
-        //consumerService.start();
+
         try {
             TimeUnit.MILLISECONDS.sleep(20000);
             System.exit(0);

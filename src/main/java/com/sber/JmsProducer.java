@@ -53,8 +53,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
                             log.info("inside sending " + ((TextMessage) msg).getText());
                             messageProducer.send(msg);
                             log.info("Message |" + ((TextMessage) msg).getText()  +
-                                    "| was sent from a Run() thread: " + Thread.currentThread().getName()
-                                    + " with ID " + msg.getJMSMessageID());
+                                    "| with ID " + msg.getJMSMessageID());
                     }
                 } catch (JMSException e) {
                     e.printStackTrace();//todo

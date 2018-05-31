@@ -47,7 +47,6 @@ public class JmsConsumer implements MessageListener, AutoCloseable {
             try {
                 String lastMessage = ((TextMessage)msg).getText();
                 log.info("Received message: " + ((TextMessage) msg).getText());
-                //log.info("LASTMESSAGE " + lastMessage);
 
                 messages.add(lastMessage);
                 message = lastMessage;

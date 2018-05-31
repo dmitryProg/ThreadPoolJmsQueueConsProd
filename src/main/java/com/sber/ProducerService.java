@@ -30,6 +30,7 @@ public class ProducerService {
                 producer.send(line + " AT TIME: " + System.currentTimeMillis());
             }
             //TimeUnit.MILLISECONDS.sleep(200);
+            log.info("End of produceTask");
         } catch (Throwable e) {
             e.printStackTrace();//todo change all these exceptions, veri govnokods
         }

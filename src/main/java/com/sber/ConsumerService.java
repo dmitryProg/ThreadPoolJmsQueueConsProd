@@ -28,7 +28,7 @@ public class ConsumerService {
                 Main.linkedBlockingQueue.offer(messageX);
             }
             log.info("Inner QUEUE: " + Main.linkedBlockingQueue.toString());
-            log.info("Initialized consumer from thread: " + Thread.currentThread().getName());
+            log.info("End of consumeTask");
         } catch (InterruptedException | JMSException e) {
             e.printStackTrace();//todo
         } catch (NullPointerException e) {
