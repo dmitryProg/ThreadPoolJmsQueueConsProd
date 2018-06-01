@@ -22,12 +22,15 @@ public class ConsumerService {
         try (JmsConsumer consumer = new JmsConsumer(URL, "test.in")) {
             while (messages.isEmpty()) {
                 consumer.init();
+                //consumer.start();
                 messages = consumer.getMessages();
+                //если действительно пустой, то цикл не сработает
             }
-            for (String messageX : messages) {
-                Main.linkedBlockingQueue.offer(messageX);
-            }
-            log.info("Inner QUEUE: " + Main.linkedBlockingQueue.toString());
+            log.info("Messages from CS: " + messages.toString());
+            //            for (String messageX : messages) {
+//                Main.linkedBlockingQueue.offer(messageX);
+//            }
+//            log.info("Inner QUEUE: " + Main.linkedBlockingQueue.toString());
             log.info("End of consumeTask");
         } catch (InterruptedException | JMSException e) {
             e.printStackTrace();//todo

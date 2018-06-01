@@ -27,7 +27,7 @@ public class ProducerService {
                 Thread.sleep(100);
                 line = Main.linkedBlockingQueue.poll();
                 log.info("Producer line of PS is " + line);
-                producer.send(line + " AT TIME: " + System.currentTimeMillis());
+                producer.send(line + " -NEW- ");
             }
             //TimeUnit.MILLISECONDS.sleep(200);
             log.info("End of produceTask");
@@ -36,38 +36,38 @@ public class ProducerService {
         }
     };
 
-    Runnable produceTask = () -> {
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        String url = "tcp://localhost:61616";
-        try (JmsProducer producer = new JmsProducer(url)) {
-            producer.start();
-
-            String line;
-            log.info("Before producer actions the queue contains:");
-            log.info("||| " + Main.linkedBlockingQueue.toString() + " |||");
-            while (!Main.linkedBlockingQueue.isEmpty()) {
-                Thread.sleep(100);
-                line = Main.linkedBlockingQueue.poll();
-                log.info("Producer line of PS is " + line);
-                producer.send(line + " at time: " + System.currentTimeMillis());
-            }
-            TimeUnit.MILLISECONDS.sleep(200);
-        } catch (Throwable e) {
-            e.printStackTrace();//todo change all these exceptions, veri govnokods
-        }
-    };
+//    Runnable produceTask = () -> {
+//        try {
+//            TimeUnit.MILLISECONDS.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        String url = "tcp://localhost:61616";
+//        try (JmsProducer producer = new JmsProducer(url)) {
+//            producer.start();
+//
+//            String line;
+//            log.info("Before producer actions the queue contains:");
+//            log.info("||| " + Main.linkedBlockingQueue.toString() + " |||");
+//            while (!Main.linkedBlockingQueue.isEmpty()) {
+//                Thread.sleep(100);
+//                line = Main.linkedBlockingQueue.poll();
+//                log.info("Producer line of PS is " + line);
+//                producer.send(line + " at time: " + System.currentTimeMillis());
+//            }
+//            TimeUnit.MILLISECONDS.sleep(200);
+//        } catch (Throwable e) {
+//            e.printStackTrace();//todo change all these exceptions, veri govnokods
+//        }
+//    };
 
     public void start() {
         try {
             Thread.sleep(100);
+            producerExecutorService.submit(produceNotDelayedTask);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        producerExecutorService.submit(produceNotDelayedTask);
     }
 
 }
