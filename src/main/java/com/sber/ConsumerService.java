@@ -18,32 +18,19 @@ public class ConsumerService {
 
     private Runnable consumeTask = () -> {
         String URL = "tcp://localhost:61616";
-        List<String> messages = new ArrayList<>();
         try (JmsConsumer consumer = new JmsConsumer(URL, "test.in")) {
-            while (messages.isEmpty()) {
-                consumer.init();
-                //consumer.start();
-                messages = consumer.getMessages();
-                //если действительно пустой, то цикл не сработает
-            }
-            log.info("Messages from CS: " + messages.toString());
-            //            for (String messageX : messages) {
-//                Main.linkedBlockingQueue.offer(messageX);
-//            }
-//            log.info("Inner QUEUE: " + Main.linkedBlockingQueue.toString());
+            consumer.start();
             log.info("End of consumeTask");
-        } catch (InterruptedException | JMSException e) {
-            e.printStackTrace();//todo
         } catch (NullPointerException e) {
             log.error("PLEASE RUN PRODUCER APPLICATION FIRST");
-            e.printStackTrace();
+            e.printStackTrace();//todo
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//todo
         }
         log.info("end of consumeTask");
     };
 
-    public void start(){
+    public void start() {
         consumerExecutorService.submit(consumeTask);
     }
 }

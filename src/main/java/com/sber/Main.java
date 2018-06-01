@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Main {
     public static LinkedBlockingQueue<String> linkedBlockingQueue = new LinkedBlockingQueue();
+    public final static int DELAY_PRODUCER_CLOSE_MS = 60000;
+    public final static int DELAY_CONSUMER_CLOSE_MS = 50000;
+    public final static int SYSTEM_EXIT_MS = 10000;
 
     public static void main(String[] args) {
         ConsumerService consumerService = new ConsumerService();
@@ -20,17 +23,16 @@ public class Main {
         try {
             TimeUnit.MILLISECONDS.sleep(100);
             producerService.start();
-            TimeUnit.MILLISECONDS.sleep(5000);
+            TimeUnit.MILLISECONDS.sleep(2000);
             consumerService.start();
 
             for (int i = 0; i < 3; i++) {
                 producerService.start();
                 TimeUnit.MILLISECONDS.sleep(1000);
-//                consumerService.start();
             }
-            producerService.start();
+            //producerService.start();
 
-            TimeUnit.MILLISECONDS.sleep(20000);
+            TimeUnit.MILLISECONDS.sleep(SYSTEM_EXIT_MS);
             System.exit(0);
         } catch (InterruptedException e) {
             e.printStackTrace();

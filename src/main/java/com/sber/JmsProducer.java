@@ -9,6 +9,8 @@ import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import static com.sber.Main.DELAY_PRODUCER_CLOSE_MS;
+
 @Slf4j
 public class JmsProducer extends Thread implements AutoCloseable {
 
@@ -25,7 +27,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     private MessageProducer init() throws JMSException {
-        log.info("Init producer...");
+        log.info("\n Init producer...");
         connection = connectionFactory.createConnection();
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -50,7 +52,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
                         while (active && (text = messagesQueue.poll()) != null) {
                             Message msg = session.createTextMessage(text);
                             msg.setObjectProperty("Created", (new Date()).toString());
-                            log.info("inside sending " + ((TextMessage) msg).getText());
+                            //log.info("inside sending " + ((TextMessage) msg).getText());
                             messageProducer.send(msg);
                             log.info("Message |" + ((TextMessage) msg).getText()  +
                                     "| with ID " + msg.getJMSMessageID());
@@ -70,7 +72,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
 
     public void close() {
         try {
-            TimeUnit.MILLISECONDS.sleep(60000);
+            TimeUnit.MILLISECONDS.sleep(DELAY_PRODUCER_CLOSE_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
