@@ -72,6 +72,8 @@ public class JmsProducer extends Thread implements AutoCloseable {
 
     public void close() {
         try {
+            //exception without it,
+            //resource is not re-opened
             TimeUnit.MILLISECONDS.sleep(DELAY_PRODUCER_CLOSE_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();

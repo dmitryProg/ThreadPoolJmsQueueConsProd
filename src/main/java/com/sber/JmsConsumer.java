@@ -65,18 +65,25 @@ public class JmsConsumer extends Thread implements AutoCloseable {//MessageListe
                     Main.linkedBlockingQueue.offer(lastMessage);
                 } catch (JMSException e) {
                     e.printStackTrace();//todo
+                    try {
+                        session.close();
+                        connection.close();
+                        consumer = init();
+                    } catch (JMSException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             } else log.info("Received message: " + msg.getClass().getName());
         }
     }
 
     public void close() {
-        log.info("AutoClosing consumer and session&connection");
         try {
             TimeUnit.MILLISECONDS.sleep(DELAY_CONSUMER_CLOSE_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        log.info("AutoClosing consumer and session&connection");
         isRunning = false;
         try {
             if (session != null) session.close();
