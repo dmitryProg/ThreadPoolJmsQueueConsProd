@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import static com.sber.Main.DELAY_CONSUMER_CLOSE_MS;
 
 @Slf4j
-public class JmsConsumer extends Thread implements AutoCloseable {//MessageListener, extends Thread
+public class JmsConsumer extends Thread implements AutoCloseable {
 
     private final ActiveMQConnectionFactory connectionFactory;
     private Connection connection;
@@ -20,10 +20,12 @@ public class JmsConsumer extends Thread implements AutoCloseable {//MessageListe
     private String queueName;
     private List<String> messages = new ArrayList<>();
     private boolean isRunning = true;
+    private InnerQueueSingleton innerQueueSingleton;
 
     public JmsConsumer(String url, String queue) {
         connectionFactory = new ActiveMQConnectionFactory(url);
         queueName = queue;
+        innerQueueSingleton = InnerQueueSingleton.getInstance();
     }
 
     public MessageConsumer init() throws JMSException {
@@ -62,7 +64,7 @@ public class JmsConsumer extends Thread implements AutoCloseable {//MessageListe
                 try {
                     String lastMessage = ((TextMessage) msg).getText();
                     log.info("Received message: " + ((TextMessage) msg).getText());
-                    Main.linkedBlockingQueue.offer(lastMessage);
+                    innerQueueSingleton.offerElement(lastMessage);
                 } catch (JMSException e) {
                     e.printStackTrace();//todo
                     try {

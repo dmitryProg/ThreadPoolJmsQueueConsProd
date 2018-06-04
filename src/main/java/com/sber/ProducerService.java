@@ -8,10 +8,12 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class ProducerService {
     private ExecutorService producerExecutorService;
+    private InnerQueueSingleton innerQueueSingleton;
 
     public ProducerService() {
         producerExecutorService = Executors//.newCachedThreadPool();
                 .newFixedThreadPool(4);
+        innerQueueSingleton = InnerQueueSingleton.getInstance();
     }
 
     Runnable produceNotDelayedTask = () -> {
@@ -21,10 +23,10 @@ public class ProducerService {
 
             String line;
             log.info("Before producer actions the queue contains: \n");
-            log.info("||| " + Main.linkedBlockingQueue.toString() + " |||");
-            while (!Main.linkedBlockingQueue.isEmpty()) {
+            log.info("||| " + innerQueueSingleton.getInnerQueue().toString() + " |||");
+            while (!innerQueueSingleton.isEmpty()) {
                 //Thread.sleep(100);
-                line = Main.linkedBlockingQueue.poll();
+                line = innerQueueSingleton.pollElement();
                 log.info("Producer line of PS is " + line);
                 producer.send(line + " -N");
             }
